@@ -1,0 +1,16 @@
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/bin/Debug/netcoreapp3.1/SmartWallit.Infrastructure.deps.json
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/bin/Debug/netcoreapp3.1/SmartWallit.Infrastructure.runtimeconfig.json
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/bin/Debug/netcoreapp3.1/SmartWallit.Infrastructure.runtimeconfig.dev.json
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/bin/Debug/netcoreapp3.1/SmartWallit.Infrastructure.dll
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/bin/Debug/netcoreapp3.1/SmartWallit.Infrastructure.pdb
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/bin/Debug/netcoreapp3.1/SmartWallit.Core.dll
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/bin/Debug/netcoreapp3.1/SmartWallit.Core.pdb
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.csproj.AssemblyReference.cache
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.AssemblyInfoInputs.cache
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.AssemblyInfo.cs
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.csproj.CopyComplete
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.dll
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.pdb
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Infrastructure/obj/Debug/netcoreapp3.1/SmartWallit.Infrastructure.genruntimeconfig.cache

@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.11
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartWallit", "SmartWallit\SmartWallit.csproj", "{F95125B6-988D-43E1-BF45-D2285CB3F124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartWallit.Core", "SmartWallit.Core\SmartWallit.Core.csproj", "{6D442862-AC2B-41D9-9855-614FFB4BD022}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartWallit.Infrastructure", "SmartWallit.Infrastructure\SmartWallit.Infrastructure.csproj", "{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F95125B6-988D-43E1-BF45-D2285CB3F124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F95125B6-988D-43E1-BF45-D2285CB3F124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F95125B6-988D-43E1-BF45-D2285CB3F124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F95125B6-988D-43E1-BF45-D2285CB3F124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D442862-AC2B-41D9-9855-614FFB4BD022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D442862-AC2B-41D9-9855-614FFB4BD022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D442862-AC2B-41D9-9855-614FFB4BD022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D442862-AC2B-41D9-9855-614FFB4BD022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A717EE3-6269-43F6-BCEB-C58C67640733}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.VersionControlPolicy = $2
+	EndGlobalSection
+EndGlobal

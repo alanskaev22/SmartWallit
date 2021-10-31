@@ -1,0 +1,9 @@
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/bin/Debug/netcoreapp3.1/SmartWallit.Core.deps.json
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/bin/Debug/netcoreapp3.1/SmartWallit.Core.dll
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/bin/Debug/netcoreapp3.1/SmartWallit.Core.pdb
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/obj/Debug/netcoreapp3.1/SmartWallit.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/obj/Debug/netcoreapp3.1/SmartWallit.Core.AssemblyInfoInputs.cache
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/obj/Debug/netcoreapp3.1/SmartWallit.Core.AssemblyInfo.cs
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/obj/Debug/netcoreapp3.1/SmartWallit.Core.csproj.CoreCompileInputs.cache
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/obj/Debug/netcoreapp3.1/SmartWallit.Core.dll
+/Users/alanskaev/Projects/SmartWallit/SmartWallit.Core/obj/Debug/netcoreapp3.1/SmartWallit.Core.pdb

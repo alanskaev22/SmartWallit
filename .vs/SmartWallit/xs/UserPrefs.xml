@@ -1,0 +1,39 @@
+﻿<Properties GitUserInfo="UsingGIT" StartupConfiguration="{F95125B6-988D-43E1-BF45-D2285CB3F124}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SmartWallit/Startup.cs">
+    <Files>
+      <File FileName="SmartWallit.Infrastructure/Data/UserRepository.cs" Line="1" Column="1" />
+      <File FileName="SmartWallit.Infrastructure/Data/Config/WalletConfiguration.cs" Line="1" Column="1" />
+      <File FileName="SmartWallit.Infrastructure/Data/Config/UserConfiguration.cs" Line="1" Column="1" />
+      <File FileName="SmartWallit.Infrastructure/Data/WalletContext.cs" Line="5" Column="1" />
+      <File FileName="SmartWallit/Startup.cs" Line="31" Column="75" />
+      <File FileName="SmartWallit/appsettings.Development.json" Line="10" Column="13" />
+      <File FileName="SmartWallit/Program.cs" Line="25" Column="6" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="SmartWallit" expanded="True">
+            <Node name="SmartWallit" expanded="True">
+              <Node name="Properties" expanded="True" />
+              <Node name="Startup.cs" selected="True" />
+            </Node>
+            <Node name="SmartWallit.Infrastructure" expanded="True">
+              <Node name="Data" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>SmartWallit.Data/SmartWallit.Infrastructure.csproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.SmartWallit PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <AuthorInfo Name="Alan Skaev" Email="alan.skaev22@gmail.com" Copyright="" Company="" Trademark="" />
+</Properties>
