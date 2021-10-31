@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartWallit.Core.Entities;
+using System;
 
 namespace SmartWallit.Infrastructure.Data.Config
 {
@@ -9,13 +9,18 @@ namespace SmartWallit.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
-            builder.Property(p => p.Id).IsRequired();
-            builder.Property(p => p.FirstName).IsRequired().HasMaxLength(50);
-            builder.Property(p => p.LastName).IsRequired().HasMaxLength(50);
-            builder.Property(p => p.DateOfBirth).IsRequired();
-            builder.Property(p => p.Email).IsRequired();
-            builder.Property(p => p.Password).IsRequired().HasMaxLength(25);
-            builder.HasOne(u => u.Wallet).WithOne(w => w.User).HasForeignKey<WalletEntity>(w => w.Id).OnDelete(DeleteBehavior.Cascade);
+            builder.Property(u => u.Id).IsRequired();
+            builder.Property(u => u.FirstName).IsRequired().HasMaxLength(50);
+            builder.Property(u => u.LastName).IsRequired().HasMaxLength(50);
+            builder.Property(u => u.DateOfBirth).IsRequired();
+            builder.Property(u => u.Email).IsRequired();
+            builder.Property(u => u.Password).IsRequired().HasMaxLength(25);
+            builder.Property(u => u.DateCreated).HasDefaultValueSql("getdate()");
+            builder.HasOne(u => u.Wallet)
+                .WithOne()
+                .HasForeignKey<WalletEntity>(w => w.Id)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

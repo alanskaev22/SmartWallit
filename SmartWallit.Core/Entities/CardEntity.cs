@@ -13,5 +13,6 @@ namespace SmartWallit.Core.Entities
         public int ExpirationMonth { get; set; }
         [Required, MaxLength(4),MinLength(3)]
         public int Cvv { get; set; }
+        public string CardNickname { get; set; }
     }
 }

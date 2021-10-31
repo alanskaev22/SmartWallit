@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using SmartWallit.Infrastructure.Data;
+using SmartWallit.Core.Interfaces;
 
 namespace SmartWallit
 {
@@ -28,10 +29,14 @@ namespace SmartWallit
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WalletContext>(options =>
-            options.UseSqlite(Configuration.GetConnectionString("Default"))
+            options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
 
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddControllers();
+            
+            services.AddSwaggerGen();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +46,11 @@ namespace SmartWallit
             {
                 app.UseDeveloperExceptionPage();
             }
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 

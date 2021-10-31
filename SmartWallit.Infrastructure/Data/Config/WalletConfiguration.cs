@@ -9,9 +9,13 @@ namespace SmartWallit.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<WalletEntity> builder)
         {
-            builder.Property(p => p.Id).IsRequired();
-            builder.Property(p => p.User).IsRequired();
-            builder.HasMany(w => w.Cards).WithOne().HasForeignKey(c => c.Id).OnDelete(DeleteBehavior.Cascade);
+            builder.Property(w => w.Balance).HasColumnType("decimal(18,2)");
+            builder.Property(w => w.DateCreated).HasDefaultValueSql("getdate()");
+            builder.HasOne(w => w.Card)
+                .WithOne()
+                .HasForeignKey<CardEntity>(c => c.Id)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

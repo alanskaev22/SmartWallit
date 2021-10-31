@@ -19,13 +19,18 @@ namespace SmartWallit.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserEntity>().ToTable("User");
+            modelBuilder.Entity<CardEntity>().ToTable("Card");
+            modelBuilder.Entity<WalletEntity>().ToTable("Wallet");
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
             {
                 foreach (var entityType in modelBuilder.Model.GetEntityTypes())
                 {
-                    var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(decimal));
+                    var properties = entityType.ClrType.GetProperties().Where(u => u.PropertyType == typeof(decimal));
 
                     foreach (var property in properties)
                     {
