@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using SmartWallit.Infrastructure.Data;
+using SmartWallit.Core.Extensions;
 using SmartWallit.Core.Interfaces;
+using SmartWallit.Core.Models;
 using SmartWallit.Helpers;
+using SmartWallit.Infrastructure.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmartWallit
 {
@@ -30,13 +32,21 @@ namespace SmartWallit
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WalletContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("Default"))
+                options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
 
-            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddControllers();
+
+            services.AddAutoMapper(typeof(MappingProfiles));
+
+            services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
             
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context => new ValidationFailedResult(context.ModelState);
+            }); // Transform Entity validation errors into your own model
+
             services.AddSwaggerGen();
 
         }
@@ -47,12 +57,17 @@ namespace SmartWallit
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+                app.UseCors(x => x
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
-            app.UseSwaggerUI();
+
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.ConfigureExceptionMiddleware();
 
             app.UseHttpsRedirection();
 

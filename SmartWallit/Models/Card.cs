@@ -10,10 +10,9 @@ namespace SmartWallit.Models
         private string _CardNumber;
         public string CardNumber
         {
-            get { return _CardNumber.Substring(_CardNumber.Length - 4); }
+            get { return _CardNumber[^4..]; }
             set { _CardNumber = value; }
         }
-
 
         public int ExpirationYear { get; set; }
         public int ExpirationMonth { get; set; }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartWallit.Core.Entities;
 using SmartWallit.Core.Interfaces;
+using SmartWallit.Core.Models;
 using SmartWallit.Infrastructure.Data;
 using SmartWallit.Models;
 using System;
@@ -13,6 +14,8 @@ using System.Threading.Tasks;
 namespace SmartWallit.Controllers
 {
     [Route("api/[controller]")]
+    [Consumes("application/json"), Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -26,8 +29,8 @@ namespace SmartWallit.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(User), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
@@ -37,9 +40,22 @@ namespace SmartWallit.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(UserEntity user)
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(ErrorDetails))]
+        public async Task<IActionResult> AddUser(NewUserRequest user)
         {
-            return Ok(await _userRepository.AddUserAsync(user));
+            return Ok(await _userRepository.AddUserAsync(_mapper.Map<NewUserRequest, UserEntity>(user)));
         }
+
+        [HttpDelete("{id}")]
+        [ProducesErrorResponseType(typeof(ErrorDetails))]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            await _userRepository.DeleteUserAsync(id);
+
+            return Ok();
+        }
+
     }
 }

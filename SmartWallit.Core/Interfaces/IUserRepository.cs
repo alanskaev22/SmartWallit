@@ -8,5 +8,6 @@ namespace SmartWallit.Core.Interfaces
     {
         Task<UserEntity> GetUserByIdAsync(int id);
         Task<UserEntity> AddUserAsync(UserEntity user);
+        Task DeleteUserAsync(int id);
     }
 }

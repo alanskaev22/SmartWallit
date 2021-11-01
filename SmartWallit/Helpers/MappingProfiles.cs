@@ -16,8 +16,14 @@ namespace SmartWallit.Helpers
                 .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
-                .ForMember(d => d._DateOfBirth, o => o.MapFrom(s => s.DateOfBirth))
-                .ForMember(d => d.UserWallet, o => o.MapFrom(s => s.Wallet));
+                .ForMember(d => d._DateOfBirth, o => o.MapFrom(s => s.DateOfBirth));
+
+            CreateMap<NewUserRequest, UserEntity>()
+                .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
+                .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
+                .ForMember(d => d.DateOfBirth, o => o.MapFrom(s => s._DateOfBirth))
+                .ForMember(d => d.Password, o => o.MapFrom(s => s.Password));
         }
     }
 }

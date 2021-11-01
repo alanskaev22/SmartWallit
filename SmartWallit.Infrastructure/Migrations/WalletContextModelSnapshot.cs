@@ -52,7 +52,12 @@ namespace SmartWallit.Infrastructure.Migrations
                         .HasMaxLength(4)
                         .HasColumnType("int");
 
+                    b.Property<int?>("WalletEntityId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WalletEntityId");
 
                     b.ToTable("Card");
                 });
@@ -70,7 +75,7 @@ namespace SmartWallit.Infrastructure.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -123,11 +128,14 @@ namespace SmartWallit.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CardId")
-                        .IsUnique()
-                        .HasFilter("[CardId] IS NOT NULL");
-
                     b.ToTable("Wallet");
+                });
+
+            modelBuilder.Entity("SmartWallit.Core.Entities.CardEntity", b =>
+                {
+                    b.HasOne("SmartWallit.Core.Entities.WalletEntity", null)
+                        .WithMany("Cards")
+                        .HasForeignKey("WalletEntityId");
                 });
 
             modelBuilder.Entity("SmartWallit.Core.Entities.UserEntity", b =>
@@ -142,12 +150,7 @@ namespace SmartWallit.Infrastructure.Migrations
 
             modelBuilder.Entity("SmartWallit.Core.Entities.WalletEntity", b =>
                 {
-                    b.HasOne("SmartWallit.Core.Entities.CardEntity", "Card")
-                        .WithOne()
-                        .HasForeignKey("SmartWallit.Core.Entities.WalletEntity", "CardId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Card");
+                    b.Navigation("Cards");
                 });
 #pragma warning restore 612, 618
         }
