@@ -13,10 +13,7 @@ namespace SmartWallit.Core.Entities
         public string Email { get; set; }
         [Column(TypeName="date")]
         public DateTime DateOfBirth { get; set; }
-        [Required]
+        [DataType(DataType.Password),Required]
         public string Password { get; set; }
-
-        public WalletEntity Wallet { get; set; }
-        public int? WalletId { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace SmartWallit.Helpers
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
                 .ForMember(d => d._DateOfBirth, o => o.MapFrom(s => s.DateOfBirth));
 
-            CreateMap<NewUserRequest, UserEntity>()
+            CreateMap<UserRequest, UserEntity>()
                 .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
                 .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))

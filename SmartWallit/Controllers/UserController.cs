@@ -42,9 +42,9 @@ namespace SmartWallit.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
-        public async Task<IActionResult> AddUser(NewUserRequest user)
+        public async Task<IActionResult> AddUser(UserRequest user)
         {
-            return Ok(await _userRepository.AddUserAsync(_mapper.Map<NewUserRequest, UserEntity>(user)));
+            return Ok(await _userRepository.AddUserAsync(_mapper.Map<UserRequest, UserEntity>(user)));
         }
 
         [HttpDelete("{id}")]

@@ -14,5 +14,7 @@ namespace SmartWallit.Core.Entities
         [Required, MaxLength(4),MinLength(3)]
         public int Cvv { get; set; }
         public string CardNickname { get; set; }
+        [Required]
+        public int WalletId { get; set; }
     }
 }

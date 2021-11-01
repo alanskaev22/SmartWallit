@@ -52,12 +52,10 @@ namespace SmartWallit.Infrastructure.Migrations
                         .HasMaxLength(4)
                         .HasColumnType("int");
 
-                    b.Property<int?>("WalletEntityId")
+                    b.Property<int>("WalletId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("WalletEntityId");
 
                     b.ToTable("Card");
                 });
@@ -79,7 +77,7 @@ namespace SmartWallit.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -96,14 +94,10 @@ namespace SmartWallit.Infrastructure.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<int?>("WalletId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("WalletId")
-                        .IsUnique()
-                        .HasFilter("[WalletId] IS NOT NULL");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("User");
                 });
@@ -118,39 +112,20 @@ namespace SmartWallit.Infrastructure.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("CardId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Wallet");
-                });
-
-            modelBuilder.Entity("SmartWallit.Core.Entities.CardEntity", b =>
-                {
-                    b.HasOne("SmartWallit.Core.Entities.WalletEntity", null)
-                        .WithMany("Cards")
-                        .HasForeignKey("WalletEntityId");
-                });
-
-            modelBuilder.Entity("SmartWallit.Core.Entities.UserEntity", b =>
-                {
-                    b.HasOne("SmartWallit.Core.Entities.WalletEntity", "Wallet")
-                        .WithOne()
-                        .HasForeignKey("SmartWallit.Core.Entities.UserEntity", "WalletId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("SmartWallit.Core.Entities.WalletEntity", b =>
-                {
-                    b.Navigation("Cards");
                 });
 #pragma warning restore 612, 618
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartWallit.Models
 {
-    public class NewUserRequest : User
+    public class UserRequest : User
     {
         [DataType(DataType.Password), Required]
         public string Password { get; set; }

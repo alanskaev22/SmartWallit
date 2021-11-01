@@ -31,10 +31,6 @@ namespace SmartWallit.Core.MIddleware
             {
                 await HandleExceptionAsync(context, ex);
             }
-            catch (ValidationException ex)
-            {
-                await HandleExceptionAsync(context, ex);
-            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex);
@@ -56,22 +52,6 @@ namespace SmartWallit.Core.MIddleware
 
             context.Response.StatusCode = (int)exception.StatusCode;
 
-
-            return context.Response.WriteAsync(errorResponse.ToString());
-        }
-
-        private Task HandleExceptionAsync(HttpContext context, ValidationException ex)
-        {
-            var errorResponse = new ErrorDetails()
-            {
-                Message = ex.Message,
-                StatusCode = (int)HttpStatusCode.InternalServerError,
-                StackTrace = ex.StackTrace
-            };
-
-            // Log errorResponse somewhere
-
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
             return context.Response.WriteAsync(errorResponse.ToString());
         }
