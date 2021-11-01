@@ -11,11 +11,7 @@ namespace SmartWallit.Infrastructure.Data.Config
         {
             builder.Property(w => w.Balance).HasColumnType("decimal(18,2)");
             builder.Property(w => w.DateCreated).HasDefaultValueSql("getdate()");
-            builder.HasOne(w => w.Card)
-                .WithOne()
-                .HasForeignKey<CardEntity>(c => c.Id)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(w => w.CardId).IsRequired(false);
         }
     }
 }

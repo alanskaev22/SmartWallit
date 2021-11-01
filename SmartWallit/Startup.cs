@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using SmartWallit.Infrastructure.Data;
 using SmartWallit.Core.Interfaces;
+using SmartWallit.Helpers;
 
 namespace SmartWallit
 {
@@ -32,6 +33,7 @@ namespace SmartWallit
             options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
 
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddControllers();
             

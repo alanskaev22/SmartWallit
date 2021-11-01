@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.DataEncryption;
+using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
 using SmartWallit.Core.Entities;
 
 namespace SmartWallit.Infrastructure.Data
@@ -10,7 +13,12 @@ namespace SmartWallit.Infrastructure.Data
     {
         public WalletContext(DbContextOptions<WalletContext> options) : base(options)
         {
+            //_provider = new AesProvider(_encryptionKey, _encryptionIV);
         }
+
+        //private readonly byte[] _encryptionKey = Encoding.UTF8.GetBytes("SSljsdkkdlo4454Maakikjhsd55GaRTP");
+        //private readonly byte[] _encryptionIV = Encoding.UTF8.GetBytes("SSljsdkkdlo4454Maakikjhsd55GaRTP");
+        //private readonly IEncryptionProvider _provider;
 
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<CardEntity> Cards { get; set; }
@@ -25,6 +33,7 @@ namespace SmartWallit.Infrastructure.Data
             modelBuilder.Entity<WalletEntity>().ToTable("Wallet");
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //modelBuilder.UseEncryption(_provider);
 
             if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
             {

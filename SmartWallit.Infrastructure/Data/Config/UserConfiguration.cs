@@ -16,9 +16,10 @@ namespace SmartWallit.Infrastructure.Data.Config
             builder.Property(u => u.Email).IsRequired();
             builder.Property(u => u.Password).IsRequired().HasMaxLength(25);
             builder.Property(u => u.DateCreated).HasDefaultValueSql("getdate()");
+            builder.Property(u => u.WalletId).IsRequired(false);
             builder.HasOne(u => u.Wallet)
                 .WithOne()
-                .HasForeignKey<WalletEntity>(w => w.Id)
+                .HasForeignKey<UserEntity>(w => w.WalletId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
         }

@@ -10,7 +10,7 @@ using SmartWallit.Infrastructure.Data;
 namespace SmartWallit.Infrastructure.Migrations
 {
     [DbContext(typeof(WalletContext))]
-    [Migration("20211031224252_InitialCreate")]
+    [Migration("20211101132724_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,9 @@ namespace SmartWallit.Infrastructure.Migrations
             modelBuilder.Entity("SmartWallit.Core.Entities.CardEntity", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CardNickname")
                         .HasMaxLength(25)
@@ -91,10 +93,14 @@ namespace SmartWallit.Infrastructure.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<int>("WalletId")
+                    b.Property<int?>("WalletId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WalletId")
+                        .IsUnique()
+                        .HasFilter("[WalletId] IS NOT NULL");
 
                     b.ToTable("User");
                 });
@@ -102,12 +108,14 @@ namespace SmartWallit.Infrastructure.Migrations
             modelBuilder.Entity("SmartWallit.Core.Entities.WalletEntity", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("CardId")
+                    b.Property<int?>("CardId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
@@ -117,32 +125,30 @@ namespace SmartWallit.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CardId")
+                        .IsUnique()
+                        .HasFilter("[CardId] IS NOT NULL");
+
                     b.ToTable("Wallet");
-                });
-
-            modelBuilder.Entity("SmartWallit.Core.Entities.CardEntity", b =>
-                {
-                    b.HasOne("SmartWallit.Core.Entities.WalletEntity", null)
-                        .WithOne("Card")
-                        .HasForeignKey("SmartWallit.Core.Entities.CardEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("SmartWallit.Core.Entities.WalletEntity", b =>
-                {
-                    b.HasOne("SmartWallit.Core.Entities.UserEntity", null)
-                        .WithOne("Wallet")
-                        .HasForeignKey("SmartWallit.Core.Entities.WalletEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SmartWallit.Core.Entities.UserEntity", b =>
                 {
+                    b.HasOne("SmartWallit.Core.Entities.WalletEntity", "Wallet")
+                        .WithOne()
+                        .HasForeignKey("SmartWallit.Core.Entities.UserEntity", "WalletId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("SmartWallit.Core.Entities.WalletEntity", b =>
                 {
+                    b.HasOne("SmartWallit.Core.Entities.CardEntity", "Card")
+                        .WithOne()
+                        .HasForeignKey("SmartWallit.Core.Entities.WalletEntity", "CardId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.Navigation("Card");
                 });
 #pragma warning restore 612, 618

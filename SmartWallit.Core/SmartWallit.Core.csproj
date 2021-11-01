@@ -12,4 +12,7 @@
     <Folder Include="Entities\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFrameworkCore.DataEncryption" Version="3.0.0" />
+  </ItemGroup>
 </Project>

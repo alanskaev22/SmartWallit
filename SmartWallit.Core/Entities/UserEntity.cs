@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartWallit.Core.Entities
 {
@@ -12,6 +13,6 @@ namespace SmartWallit.Core.Entities
         public string Password { get; set; }
 
         public WalletEntity Wallet { get; set; }
-        public int WalletId { get; set; }
+        public int? WalletId { get; set; }
     }
 }
