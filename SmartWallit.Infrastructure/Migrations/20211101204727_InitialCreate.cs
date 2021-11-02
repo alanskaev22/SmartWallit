@@ -14,9 +14,9 @@ namespace SmartWallit.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CardNumber = table.Column<string>(type: "nvarchar(19)", maxLength: 19, nullable: false),
-                    ExpirationYear = table.Column<int>(type: "int", maxLength: 4, nullable: false),
-                    ExpirationMonth = table.Column<int>(type: "int", maxLength: 2, nullable: false),
-                    Cvv = table.Column<int>(type: "int", maxLength: 4, nullable: false),
+                    ExpirationYear = table.Column<int>(type: "int", nullable: false),
+                    ExpirationMonth = table.Column<int>(type: "int", nullable: false),
+                    Cvv = table.Column<int>(type: "int", nullable: false),
                     CardNickname = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
                     WalletId = table.Column<int>(type: "int", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
@@ -58,6 +58,12 @@ namespace SmartWallit.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Wallet", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Card_CardNumber",
+                table: "Card",
+                column: "CardNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Email",

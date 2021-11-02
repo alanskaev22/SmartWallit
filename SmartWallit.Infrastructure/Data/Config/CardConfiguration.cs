@@ -13,6 +13,8 @@ namespace SmartWallit.Infrastructure.Data.Config
         {
             builder.Property(c => c.DateCreated).HasDefaultValueSql("getdate()");
             builder.Property(c => c.CardNickname).HasMaxLength(25).IsRequired(false);
+            builder.HasIndex(c => c.CardNumber).IsUnique();
+
         }
     }
 

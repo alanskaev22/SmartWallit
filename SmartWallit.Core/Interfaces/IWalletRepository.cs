@@ -8,6 +8,7 @@ namespace SmartWallit.Core.Interfaces
 {
     public interface IWalletRepository
     {
-        Task<WalletEntity> CreateWallet(WalletEntity wallet);
+        Task<WalletEntity> CreateWallet(int userId);
+        Task<WalletEntity> GetWallet(int userId);
     }
 }

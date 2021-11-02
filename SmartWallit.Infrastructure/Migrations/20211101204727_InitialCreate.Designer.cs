@@ -10,7 +10,7 @@ using SmartWallit.Infrastructure.Data;
 namespace SmartWallit.Infrastructure.Migrations
 {
     [DbContext(typeof(WalletContext))]
-    [Migration("20211101183913_InitialCreate")]
+    [Migration("20211101204727_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,6 @@ namespace SmartWallit.Infrastructure.Migrations
                         .HasColumnType("nvarchar(19)");
 
                     b.Property<int>("Cvv")
-                        .HasMaxLength(4)
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
@@ -47,17 +46,18 @@ namespace SmartWallit.Infrastructure.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("ExpirationMonth")
-                        .HasMaxLength(2)
                         .HasColumnType("int");
 
                     b.Property<int>("ExpirationYear")
-                        .HasMaxLength(4)
                         .HasColumnType("int");
 
                     b.Property<int>("WalletId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CardNumber")
+                        .IsUnique();
 
                     b.ToTable("Card");
                 });

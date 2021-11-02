@@ -12,6 +12,7 @@ using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
 using SmartWallit.Helpers;
 using SmartWallit.Infrastructure.Data;
+using SmartWallit.Infrastructure.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

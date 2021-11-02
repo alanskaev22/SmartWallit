@@ -4,7 +4,7 @@ using SmartWallit.Core.Entities;
 using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
 
-namespace SmartWallit.Infrastructure.Data
+namespace SmartWallit.Infrastructure.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
@@ -19,7 +19,7 @@ namespace SmartWallit.Infrastructure.Data
         {
             var result = await _walletContext.Users.FindAsync(id);
 
-            return result ?? throw new CustomException(System.Net.HttpStatusCode.BadRequest, $"Could not find user with id: {id}", nameof(id));
+            return result ?? throw new CustomException(System.Net.HttpStatusCode.NotFound, $"User with id: {id} Not Found.", nameof(id));
         }
 
         public async Task<UserEntity> AddUserAsync(UserEntity user)
@@ -42,7 +42,7 @@ namespace SmartWallit.Infrastructure.Data
             }
             catch
             {
-                throw new CustomException(System.Net.HttpStatusCode.BadRequest, $"Error occured while deleting user with id: {id}. User could already have been deleted.", nameof(id));
+                throw new CustomException(System.Net.HttpStatusCode.BadRequest, $"User with id {id} Not Found. User could already have been deleted.", nameof(id));
             }
 
         }

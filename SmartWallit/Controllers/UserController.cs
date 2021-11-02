@@ -33,9 +33,9 @@ namespace SmartWallit.Controllers
         [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            var userEntity = await _userRepository.GetUserByIdAsync(id);
 
-            return Ok(_mapper.Map<UserEntity, User>(user));
+            return Ok(_mapper.Map<UserEntity, User>(userEntity));
 
         }
 
@@ -44,7 +44,9 @@ namespace SmartWallit.Controllers
         [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> AddUser(UserRequest user)
         {
-            return Ok(await _userRepository.AddUserAsync(_mapper.Map<UserRequest, UserEntity>(user)));
+            var userEntity = await _userRepository.AddUserAsync(_mapper.Map<UserRequest, UserEntity>(user));
+
+            return Ok(_mapper.Map<UserEntity, User>(userEntity));
         }
 
         [HttpDelete("{id}")]
