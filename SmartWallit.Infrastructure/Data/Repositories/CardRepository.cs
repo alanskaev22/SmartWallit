@@ -19,7 +19,7 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             _walletContext = walletContext;
         }
 
-        public async Task<CardEntity> CreateCard(int userId, CardEntity card)
+        public async Task<CardEntity> CreateCard(string userId, CardEntity card)
         {
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
 
@@ -37,11 +37,11 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             return card;
         }
 
-        public async Task<CardEntity> GetCardById(int userId, int cardId)
+        public async Task<CardEntity> GetCardById(string userId, int cardId)
         {
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
 
-            if(wallet == null)
+            if (wallet == null)
             {
                 throw new CustomException(System.Net.HttpStatusCode.NotFound, $"Wallet for user with id {userId} Not Found. Make sure user has wallet.", nameof(userId));
             }
@@ -51,7 +51,7 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             return card ?? throw new CustomException(System.Net.HttpStatusCode.NotFound, $"Card with id {cardId} Not Found.", nameof(cardId));
         }
 
-        public async Task<List<CardEntity>> GetCards(int userId)
+        public async Task<List<CardEntity>> GetCards(string userId)
         {
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
 

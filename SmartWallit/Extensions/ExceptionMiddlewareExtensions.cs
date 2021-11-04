@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SmartWallit.Core.Extensions
+namespace SmartWallit.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {

@@ -32,7 +32,7 @@ namespace SmartWallit.Controllers
         [HttpGet("{userId}")]
         [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
-        public async Task<IActionResult> GetWallet(int userId)
+        public async Task<IActionResult> GetWallet(string userId)
         {
             var walletEntity = await _walletRepository.GetWallet(userId);
             var cardsEntity = await _cardRepository.GetCards(userId);
@@ -46,7 +46,7 @@ namespace SmartWallit.Controllers
         }
 
         [HttpPost("{userId}")]
-        public async Task<IActionResult> CreateWallet(int userId)
+        public async Task<IActionResult> CreateWallet(string userId)
         {
             return Ok(await _walletRepository.CreateWallet(userId));
         }

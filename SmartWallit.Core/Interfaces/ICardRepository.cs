@@ -8,8 +8,8 @@ namespace SmartWallit.Core.Interfaces
 {
     public interface ICardRepository
     {
-        Task<CardEntity> GetCardById(int userId, int cardId);
-        Task<CardEntity> CreateCard(int userId, CardEntity card);
-        Task<List<CardEntity>> GetCards(int userId);
+        Task<CardEntity> GetCardById(string userId, int cardId);
+        Task<CardEntity> CreateCard(string userId, CardEntity card);
+        Task<List<CardEntity>> GetCards(string userId);
     }
 }

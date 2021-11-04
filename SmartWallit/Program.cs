@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SmartWallit.Core.Entities.Identity;
 using SmartWallit.Infrastructure.Data;
+using SmartWallit.Infrastructure.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmartWallit
 {
@@ -18,13 +21,12 @@ namespace SmartWallit
         {
             var host = CreateHostBuilder(args).Build();
 
-            await InitializeDb(host);
+            await InitializeAppIdentityDb(host);
 
             host.Run();
         }
 
-
-        private static async Task  InitializeDb(IHost host)
+        private static async Task InitializeAppIdentityDb(IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -32,19 +34,27 @@ namespace SmartWallit
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
-                    var context = services.GetRequiredService<WalletContext>();
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                    var identityContext = services.GetRequiredService<AppIdentityDbContext>();
 
-                    await context.Database.MigrateAsync();
-                    await DbInitializer.Initialize(context);
+                    try
+                    {
+                        await identityContext.Database.MigrateAsync();
+                    }
+                    catch
+                    {
+                    }
+
+                    await InitializeAppIdentityDbSeed.SeedUsersAsync(userManager);
+
                 }
                 catch (Exception ex)
                 {
 
                     var logger = loggerFactory.CreateLogger<Program>();
-                    logger.LogError(ex, "An  Error Occured During Migration");
+                    logger.LogError(ex, "An Error Occured During Migration");
                 }
             }
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

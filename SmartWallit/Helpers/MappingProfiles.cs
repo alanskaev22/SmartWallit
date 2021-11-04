@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SmartWallit.Core.Entities;
+using SmartWallit.Core.Entities.Identity;
 using SmartWallit.Models;
 using System;
 using System.Collections.Generic;
@@ -12,39 +13,19 @@ namespace SmartWallit.Helpers
     {
         public MappingProfiles()
         {
-            CreateMap<UserEntity, User>()
-                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
-                .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
-                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
-                .ForMember(d => d._DateOfBirth, o => o.MapFrom(s => s.DateOfBirth));
+            CreateMap<AppUser, AuthenticateResponse>()
+                .ForMember(d => d.UserId, o => o.MapFrom(s => s.Id));
 
-            CreateMap<UserRequest, UserEntity>()
-                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
-                .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
-                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email))
-                .ForMember(d => d.DateOfBirth, o => o.MapFrom(s => s._DateOfBirth))
-                .ForMember(d => d.Password, o => o.MapFrom(s => s.Password));
+            CreateMap<RegisterRequest, AppUser>()
+                .ForMember(d => d.UserName, o => o.MapFrom(s => s.Email))
+                .ForMember(d => d.DateOfBirth, o => o.MapFrom(s => s._DateOfBirth)); 
 
+            CreateMap<Address, AddressModel>();
+            CreateMap<AddressModel, Address>();
 
+            CreateMap<CardEntity, Card>();
 
-            CreateMap<CardEntity, Card>()
-                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(d => d.CardNickname, o => o.MapFrom(s => s.CardNickname))
-                .ForMember(d => d.CardNumber, o => o.MapFrom(s => s.CardNumber))
-                .ForMember(d => d.ExpirationYear, o => o.MapFrom(s => s.ExpirationYear))
-                .ForMember(d => d.ExpirationMonth, o => o.MapFrom(s => s.ExpirationMonth));
-
-            CreateMap<CardRequest, CardEntity>()
-                   .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
-                   .ForMember(d => d.CardNickname, o => o.MapFrom(s => s.CardNickname))
-                   .ForMember(d => d.CardNumber, o => o.MapFrom(s => s.CardNumber))
-                   .ForMember(d => d.ExpirationYear, o => o.MapFrom(s => s.ExpirationYear))
-                   .ForMember(d => d.ExpirationMonth, o => o.MapFrom(s => s.ExpirationMonth))
-                   .ForMember(d => d.Cvv, o => o.MapFrom(s => s.Cvv));
-
-
+            CreateMap<CardRequest, CardEntity>();
 
             var walletMap = CreateMap<WalletEntity, Wallet>();
             walletMap.ForMember(d => d.Id, o => o.MapFrom(s => s.Id))

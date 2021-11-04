@@ -7,12 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SmartWallit.Core.Extensions;
 using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
+using SmartWallit.Extensions;
 using SmartWallit.Helpers;
 using SmartWallit.Infrastructure.Data;
 using SmartWallit.Infrastructure.Data.Repositories;
+using SmartWallit.Infrastructure.Identity;
+using SmartWallit.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,18 +34,25 @@ namespace SmartWallit
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WalletContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Default"))
+                options.UseSqlServer(Configuration.GetConnectionString("SmartWallit"))
             );
 
-            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Identity"))
+            );
+
             services.AddTransient<IWalletRepository, WalletRepository>();
             services.AddTransient<ICardRepository, CardRepository>();
 
+            services.AddScoped<ITokenService, TokenService>();
+
             services.AddAutoMapper(typeof(MappingProfiles));
+
+            services.AddIdentityServices(Configuration);
 
             services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
-            
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = context => new ValidationFailedResult(context.ModelState);
@@ -73,6 +82,8 @@ namespace SmartWallit
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication(); // Must come before Authorization
 
             app.UseAuthorization();
 

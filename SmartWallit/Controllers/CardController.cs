@@ -31,7 +31,7 @@ namespace SmartWallit.Controllers
         [HttpGet("{userId}")]
         [ProducesResponseType(typeof(Card), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
-        public async Task<IActionResult> GetCard(int userId, [FromQuery] int cardId)
+        public async Task<IActionResult> GetCard(string userId, [FromQuery] int cardId)
         {
             var cardEntity = await _cardRepository.GetCardById(userId, cardId);
 
@@ -41,7 +41,7 @@ namespace SmartWallit.Controllers
         [HttpPost("{userId}")]
         [ProducesResponseType(typeof(Card), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
-        public async Task<IActionResult> AddCard(int userId, CardRequest card)
+        public async Task<IActionResult> AddCard(string userId, CardRequest card)
         {
             var cardEntity = await _cardRepository.CreateCard(userId, _mapper.Map<CardRequest, CardEntity>(card));
 
