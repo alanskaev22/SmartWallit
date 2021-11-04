@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartWallit.Models
 {
-    public class AuthenticateRequest
+    public class LoginRequest
     {
         [Required]
         public string Email { get; set; }

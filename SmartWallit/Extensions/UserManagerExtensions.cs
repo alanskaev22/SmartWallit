@@ -11,14 +11,14 @@ namespace SmartWallit.Extensions
 {
     public static class UserManagerExtensions
     {
-        public static async Task<AppUser> FindByEmailWithAddressAsync(this UserManager<AppUser> input, ClaimsPrincipal user)
+        public static async Task<AppUser> FindByEmailWithAddressFromClaims(this UserManager<AppUser> input, ClaimsPrincipal user)
         {
             var email = user?.FindFirst(ClaimTypes.Email)?.Value;
 
             return await input.Users.Include(u => u.Address).SingleOrDefaultAsync(x => x.Email == email);
         }
 
-        public static async Task<AppUser> FindByEmailFromClaimsPrincipal(this UserManager<AppUser> input, ClaimsPrincipal user)
+        public static async Task<AppUser> FindByEmailFromClaims(this UserManager<AppUser> input, ClaimsPrincipal user)
         {
             var email = user?.FindFirst(ClaimTypes.Email)?.Value;
 

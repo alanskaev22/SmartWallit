@@ -35,7 +35,7 @@ namespace SmartWallit.Infrastructure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddDays(5),
                 SigningCredentials = creds,
                 Issuer = _config["Token:Issuer"]
             };
