@@ -52,5 +52,32 @@ namespace SmartWallit.Infrastructure.Data.Repositories
 
             return wallet ?? throw new CustomException(System.Net.HttpStatusCode.NotFound, "No wallet was found for this user.");
         }
+
+        public async Task<bool> DeleteWallet(string userId)
+        {
+            var success = false;
+
+            var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
+            var cards = await _walletContext.Cards.Where(c => c.WalletId == wallet.Id).ToListAsync();
+            
+            using var transaction = _walletContext.Database.BeginTransaction();
+            try
+            {
+                _walletContext.Cards.RemoveRange(cards);
+
+                _walletContext.Wallets.Remove(wallet);
+
+                await _walletContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                success = true;
+            }
+            catch
+            {
+            }
+
+            return success;
+        }
     }
 }

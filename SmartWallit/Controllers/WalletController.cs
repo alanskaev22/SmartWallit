@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartWallit.Core.Entities;
@@ -12,28 +13,36 @@ using System.Threading.Tasks;
 
 namespace SmartWallit.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [Consumes("application/json"), Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesErrorResponseType(typeof(ErrorDetails))]
     [ApiController]
     public class WalletController : ControllerBase
     {
         private readonly IWalletRepository _walletRepository;
         private readonly ICardRepository _cardRepository;
         private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-        public WalletController(IWalletRepository walletRepository, IMapper mapper, ICardRepository cardRepository)
+        public WalletController(IWalletRepository walletRepository, IMapper mapper, ICardRepository cardRepository, ITokenService tokenService)
         {
             _walletRepository = walletRepository;
             _mapper = mapper;
             _cardRepository = cardRepository;
+            _tokenService = tokenService;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet]
         [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
-        public async Task<IActionResult> GetWallet(string userId)
+        public async Task<IActionResult> GetWallet()
         {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+
             var walletEntity = await _walletRepository.GetWallet(userId);
             var cardsEntity = await _cardRepository.GetCards(userId);
             
@@ -45,10 +54,13 @@ namespace SmartWallit.Controllers
             return Ok(wallet);
         }
 
-        [HttpPost("{userId}")]
-        public async Task<IActionResult> CreateWallet(string userId)
+        [HttpPost]
+        public async Task<IActionResult> CreateWallet()
         {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+
             return Ok(await _walletRepository.CreateWallet(userId));
         }
+
     }
 }

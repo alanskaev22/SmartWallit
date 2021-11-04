@@ -15,8 +15,8 @@ namespace SmartWallit.Controllers
 {
     [Route("api/[controller]")]
     [Consumes("application/json"), Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesErrorResponseType(typeof(ErrorDetails))]
     [ApiController]
@@ -26,13 +26,15 @@ namespace SmartWallit.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
+        private readonly IWalletRepository _walletRepository;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, ITokenService tokenService)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IMapper mapper, ITokenService tokenService, IWalletRepository walletRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _tokenService = tokenService;
+            _walletRepository = walletRepository;
         }
 
         [Authorize]
@@ -74,6 +76,30 @@ namespace SmartWallit.Controllers
 
             throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Error Updating Account.");
         }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.FindByEmailFromClaims(HttpContext.User);
+
+            if (user == null) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Bad Request");
+
+            var wallet = await _walletRepository.GetWallet(user.Id);
+
+            if (wallet.Balance > 0) throw new CustomException(System.Net.HttpStatusCode.BadRequest, $"Wallet has a balance of {wallet.Balance}. Transfer remaining balance before deleting account.");
+
+            var result = await _walletRepository.DeleteWallet(user.Id);
+
+            if (!result) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Bad Request");
+
+            var userResult = await _userManager.DeleteAsync(user);
+
+            if (!userResult.Succeeded) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Bad Request");
+
+            return Ok();
+        }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Authenticate(LoginRequest request)

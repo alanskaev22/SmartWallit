@@ -8,7 +8,7 @@ namespace SmartWallit.Core.Entities
         private string _CardNumber;
         public string CardNumber 
         {
-            get { return _CardNumber[^4..]; }
+            get { return _CardNumber[..4] + "." + _CardNumber[^4..]; }
             set { _CardNumber = value;  }
         }
         public int ExpirationYear { get; set; }

@@ -11,7 +11,6 @@ namespace SmartWallit.Infrastructure.Data.Config
         {
             builder.Property(w => w.Balance).HasColumnType("decimal(18,2)");
             builder.Property(w => w.DateCreated).HasDefaultValueSql("getdate()");
-            builder.HasIndex(w => w.UserId).IsUnique();
-        }
+            builder.HasIndex(w => w.UserId).IsUnique();        }
     }
 }

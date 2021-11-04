@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartWallit.Core.Entities;
@@ -12,37 +13,46 @@ using System.Threading.Tasks;
 
 namespace SmartWallit.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [Consumes("application/json"), Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesErrorResponseType(typeof(ErrorDetails))]
     [ApiController]
     public class CardController : ControllerBase
     {
         private readonly ICardRepository _cardRepository;
         private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
 
-        public CardController(ICardRepository cardRepository, IMapper mapper)
+        public CardController(ICardRepository cardRepository, IMapper mapper, ITokenService tokenService)
         {
             _cardRepository = cardRepository;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet]
         [ProducesResponseType(typeof(Card), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
-        public async Task<IActionResult> GetCard(string userId, [FromQuery] int cardId)
+        public async Task<IActionResult> GetCard([FromQuery] int cardId)
         {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+
             var cardEntity = await _cardRepository.GetCardById(userId, cardId);
 
             return Ok(_mapper.Map<CardEntity, Card>(cardEntity));
         }
 
-        [HttpPost("{userId}")]
+        [HttpPost]
         [ProducesResponseType(typeof(Card), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
-        public async Task<IActionResult> AddCard(string userId, CardRequest card)
+        public async Task<IActionResult> AddCard(CardRequest card)
         {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+
             var cardEntity = await _cardRepository.CreateCard(userId, _mapper.Map<CardRequest, CardEntity>(card));
 
             return Ok(_mapper.Map<CardEntity, Card>(cardEntity));

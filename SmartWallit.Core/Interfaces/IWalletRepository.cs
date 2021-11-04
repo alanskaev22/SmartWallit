@@ -10,5 +10,6 @@ namespace SmartWallit.Core.Interfaces
     {
         Task<WalletEntity> CreateWallet(string userId);
         Task<WalletEntity> GetWallet(string userId);
+        Task<bool> DeleteWallet(string userId);
     }
 }

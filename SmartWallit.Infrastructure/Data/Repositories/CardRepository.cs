@@ -30,6 +30,13 @@ namespace SmartWallit.Infrastructure.Data.Repositories
 
             card.WalletId = wallet.Id;
 
+            var allcards = await _walletContext.Cards.Where(x => x.WalletId == card.WalletId).ToListAsync();
+
+            var cardExists = allcards.FirstOrDefault(c => $"{c.CardNumber[..4]}.{c.CardNumber[^4..]}" == card.CardNumber);
+
+            if (cardExists != null) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Card already exists.");
+
+
             await _walletContext.Cards.AddAsync(card);
 
             await _walletContext.SaveChangesAsync();

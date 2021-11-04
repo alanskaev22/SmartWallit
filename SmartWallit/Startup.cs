@@ -58,7 +58,7 @@ namespace SmartWallit
                 options.InvalidModelStateResponseFactory = context => new ValidationFailedResult(context.ModelState);
             }); // Transform Entity validation errors into your own model
 
-            services.AddSwaggerGen();
+            services.AddSwaggerDocumentation();
 
         }
 
@@ -72,9 +72,7 @@ namespace SmartWallit
                     .AllowAnyMethod()
                     .AllowAnyHeader());
 
-
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            app.UseSwaggerDocumentation();
             }
 
             app.ConfigureExceptionMiddleware();

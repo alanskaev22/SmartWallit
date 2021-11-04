@@ -5,6 +5,7 @@ using SmartWallit.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -45,6 +46,11 @@ namespace SmartWallit.Infrastructure.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public string GetClaimValueFromClaimsPrincipal(ClaimsPrincipal user, string claim)
+        {
+            return user?.Claims.FirstOrDefault(c => c.Type == claim).Value;
         }
     }
 }
