@@ -57,5 +57,16 @@ namespace SmartWallit.Controllers
 
             return Ok(_mapper.Map<CardEntity, Card>(cardEntity));
         }
+
+        [HttpDelete]
+        [ProducesErrorResponseType(typeof(ErrorDetails))]
+        public async Task<IActionResult> DeleteCard(int cardId)
+        {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+
+            var cardDeleted = await _cardRepository.DeleteCard(userId, cardId);
+
+            return cardDeleted ? Ok() : BadRequest();
+        }
     }
 }

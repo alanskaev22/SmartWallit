@@ -11,5 +11,6 @@ namespace SmartWallit.Core.Interfaces
         Task<CardEntity> GetCardById(string userId, int cardId);
         Task<CardEntity> CreateCard(string userId, CardEntity card);
         Task<List<CardEntity>> GetCards(string userId);
+        Task<bool> DeleteCard(string userId, int cardId);
     }
 }

@@ -44,6 +44,27 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             return card;
         }
 
+        public async Task<bool> DeleteCard(string userId, int cardId)
+        {
+            var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
+
+            if (wallet == null)
+            {
+                throw new CustomException(System.Net.HttpStatusCode.NotFound, $"Wallet for user with id {userId} Not Found. Make sure user has wallet.", nameof(userId));
+            }
+
+            var card = await _walletContext.Cards.FirstOrDefaultAsync(c => c.Id == cardId && c.WalletId == wallet.Id);
+
+            if(card == null) throw new CustomException(System.Net.HttpStatusCode.NotFound, $"Card with id {cardId} Not Found.", nameof(cardId));
+
+            _walletContext.Cards.Remove(card);
+
+            await _walletContext.SaveChangesAsync();
+
+            return true;
+
+        }
+
         public async Task<CardEntity> GetCardById(string userId, int cardId)
         {
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
