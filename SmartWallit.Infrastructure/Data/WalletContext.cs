@@ -17,6 +17,7 @@ namespace SmartWallit.Infrastructure.Data
 
         public DbSet<CardEntity> Cards { get; set; }
         public DbSet<WalletEntity> Wallets { get; set; }
+        public DbSet<TransactionEntity> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,7 @@ namespace SmartWallit.Infrastructure.Data
 
             modelBuilder.Entity<CardEntity>().ToTable("Card");
             modelBuilder.Entity<WalletEntity>().ToTable("Wallet");
+            modelBuilder.Entity<TransactionEntity>().ToTable("Transaction");
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 

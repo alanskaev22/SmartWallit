@@ -45,7 +45,7 @@ namespace SmartWallit.Controllers
 
             var walletEntity = await _walletRepository.GetWallet(userId);
             var cardsEntity = await _cardRepository.GetCards(userId);
-            
+
             var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
             var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
 
@@ -59,7 +59,49 @@ namespace SmartWallit.Controllers
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
 
-            return Ok(await _walletRepository.CreateWallet(userId));
+            var walletEntity = await _walletRepository.CreateWallet(userId);
+            var cardsEntity = await _cardRepository.GetCards(userId);
+
+            var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
+            var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
+
+            wallet.Cards = cards;
+
+            return Ok(wallet);
+        }
+
+        [HttpPost("balance/add")]
+        public async Task<IActionResult> AddFunds(FundsTransfer request)
+        {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+            var email = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userEmail");
+
+            var walletEntity = await _walletRepository.AddFunds(userId, request.CardId, request.Amount, email);
+            var cardsEntity = await _cardRepository.GetCards(userId);
+
+            var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
+            var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
+
+            wallet.Cards = cards;
+
+            return Ok(wallet);
+        }
+
+        [HttpPost("balance/withdraw")]
+        public async Task<IActionResult> WithdrawFunds(FundsTransfer request)
+        {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+            var email = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userEmail");
+
+            var walletEntity = await _walletRepository.WithdrawFunds(userId, request.CardId, request.Amount, email);
+            var cardsEntity = await _cardRepository.GetCards(userId);
+
+            var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
+            var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
+
+            wallet.Cards = cards;
+
+            return Ok(wallet);
         }
 
     }
