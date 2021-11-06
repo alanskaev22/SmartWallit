@@ -13,10 +13,12 @@ namespace SmartWallit.Infrastructure.Data.Repositories
     public class CardRepository : ICardRepository
     {
         private readonly WalletContext _walletContext;
+        private readonly IEncryptionService _encryptionService;
 
-        public CardRepository(WalletContext walletContext)
+        public CardRepository(WalletContext walletContext, IEncryptionService encryptionService)
         {
             _walletContext = walletContext;
+            _encryptionService = encryptionService;
         }
 
         public async Task<CardEntity> CreateCard(string userId, CardEntity card)
@@ -25,17 +27,24 @@ namespace SmartWallit.Infrastructure.Data.Repositories
 
             if (wallet == null)
             {
-                throw new CustomException(System.Net.HttpStatusCode.NotFound, $"Wallet for user with id {userId} Not Found. Make sure wallet exists for the user.", nameof(userId));
+                throw new CustomException(System.Net.HttpStatusCode.NotFound, $"Wallet for user with id {userId} Not Found. Make sure wallet exists before adding cards.", nameof(userId));
             }
 
             card.WalletId = wallet.Id;
 
             var allcards = await _walletContext.Cards.Where(x => x.WalletId == card.WalletId).ToListAsync();
 
-            var cardExists = allcards.FirstOrDefault(c => $"{c.CardNumber[..4]}.{c.CardNumber[^4..]}" == card.CardNumber);
+            var cardExists = allcards.FirstOrDefault(c => _encryptionService.Decrypt(card.CardNumber, c.CardSalt, c.CardHash));
 
             if (cardExists != null) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Card already exists.");
 
+            var encryptedCardNumber = _encryptionService.Encrypt(card.CardNumber);
+
+            card.CardHash = encryptedCardNumber.Hash;
+            card.CardSalt = encryptedCardNumber.Salt;
+
+            // Leave only first and last 4 characters of a CardNumber;
+            card.CardNumber = card.CardNumber.Replace(card.CardNumber[4..^4], ".");
 
             await _walletContext.Cards.AddAsync(card);
 

@@ -45,6 +45,7 @@ namespace SmartWallit
             services.AddTransient<ICardRepository, CardRepository>();
 
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEncryptionService, EncryptionService>();
 
             services.AddAutoMapper(typeof(MappingProfiles));
 

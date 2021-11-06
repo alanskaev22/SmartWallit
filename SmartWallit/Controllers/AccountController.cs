@@ -6,21 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using SmartWallit.Core.Entities.Identity;
 using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
-using SmartWallit.Core.Models;
 using SmartWallit.Extensions;
 using SmartWallit.Models;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Controllers
 {
-    [Route("api/[controller]")]
-    [Consumes("application/json"), Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesErrorResponseType(typeof(ErrorDetails))]
-    [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;

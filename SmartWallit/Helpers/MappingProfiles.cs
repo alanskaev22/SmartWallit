@@ -22,7 +22,7 @@ namespace SmartWallit.Helpers
             CreateMap<Address, AddressModel>();
             CreateMap<AddressModel, Address>();
 
-            CreateMap<CardEntity, Card>();
+            CreateMap<CardEntity, CardResponse>();
 
             CreateMap<CardRequest, CardEntity>();
             

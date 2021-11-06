@@ -6,22 +6,13 @@ using SmartWallit.Core.Entities;
 using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
 using SmartWallit.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    [Consumes("application/json"), Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesErrorResponseType(typeof(ErrorDetails))]
-    [ApiController]
-    public class WalletController : ControllerBase
+    public class WalletController : BaseApiController
     {
         private readonly IWalletRepository _walletRepository;
         private readonly ICardRepository _cardRepository;
@@ -47,7 +38,7 @@ namespace SmartWallit.Controllers
             var cardsEntity = await _cardRepository.GetCards(userId);
 
             var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
+            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 
@@ -63,7 +54,7 @@ namespace SmartWallit.Controllers
             var cardsEntity = await _cardRepository.GetCards(userId);
 
             var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
+            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 
@@ -80,7 +71,7 @@ namespace SmartWallit.Controllers
             var cardsEntity = await _cardRepository.GetCards(userId);
 
             var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
+            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 
@@ -97,7 +88,7 @@ namespace SmartWallit.Controllers
             var cardsEntity = await _cardRepository.GetCards(userId);
 
             var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<Card>>(cardsEntity);
+            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 

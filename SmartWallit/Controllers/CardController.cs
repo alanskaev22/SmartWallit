@@ -5,23 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using SmartWallit.Core.Entities;
 using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
+using SmartWallit.Extensions;
 using SmartWallit.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    [Consumes("application/json"), Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesErrorResponseType(typeof(ErrorDetails))]
-    [ApiController]
-    public class CardController : ControllerBase
+    public class CardController : BaseApiController
     {
         private readonly ICardRepository _cardRepository;
         private readonly IMapper _mapper;
@@ -35,7 +26,7 @@ namespace SmartWallit.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Card), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CardResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> GetCard([FromQuery] int cardId)
         {
@@ -43,19 +34,21 @@ namespace SmartWallit.Controllers
 
             var cardEntity = await _cardRepository.GetCardById(userId, cardId);
 
-            return Ok(_mapper.Map<CardEntity, Card>(cardEntity));
+            return Ok(_mapper.Map<CardEntity, CardResponse>(cardEntity));
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(Card), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CardResponse), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> AddCard(CardRequest card)
         {
+            card.ValidateCardExpiration();
+
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
 
             var cardEntity = await _cardRepository.CreateCard(userId, _mapper.Map<CardRequest, CardEntity>(card));
 
-            return Ok(_mapper.Map<CardEntity, Card>(cardEntity));
+            return Ok(_mapper.Map<CardEntity, CardResponse>(cardEntity));
         }
 
         [HttpDelete]
