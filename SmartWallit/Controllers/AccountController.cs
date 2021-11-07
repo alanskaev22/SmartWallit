@@ -45,7 +45,7 @@ namespace SmartWallit.Controllers
         {
             var user = await _userManager.FindByEmailWithAddressFromClaims(HttpContext.User);
 
-            var response = _mapper.Map<AppUser, Account>(user ?? throw new CustomException(System.Net.HttpStatusCode.NotFound, "Account not found"));
+            var response = _mapper.Map<Account>(user ?? throw new CustomException(System.Net.HttpStatusCode.NotFound, "Account not found"));
 
             return Ok(response);
         }
@@ -60,11 +60,11 @@ namespace SmartWallit.Controllers
             user.FirstName = account.FirstName;
             user.LastName = account.LastName;
             user.DateOfBirth = account._DateOfBirth.Value;
-            user.Address = _mapper.Map<AddressModel, Address>(account.Address);
+            user.Address = _mapper.Map<Address>(account.Address);
 
             var result = await _userManager.UpdateAsync(user);
 
-            if (result.Succeeded) return Ok(_mapper.Map<AppUser, Account>(user));
+            if (result.Succeeded) return Ok(_mapper.Map<Account>(user));
 
             throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Error Updating Account.");
         }
@@ -115,7 +115,7 @@ namespace SmartWallit.Controllers
 
             if (user != null) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Account already exists.");
 
-            user = _mapper.Map<RegisterRequest, AppUser>(request);
+            user = _mapper.Map<AppUser>(request);
 
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded) throw new CustomException(System.Net.HttpStatusCode.BadRequest);

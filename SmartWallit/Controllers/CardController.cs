@@ -27,32 +27,42 @@ namespace SmartWallit.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(CardResponse), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> GetCard([FromQuery] int cardId)
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
 
             var cardEntity = await _cardRepository.GetCardById(userId, cardId);
 
-            return Ok(_mapper.Map<CardEntity, CardResponse>(cardEntity));
+            return Ok(_mapper.Map<CardResponse>(cardEntity));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(CardResponse), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> AddCard(CardRequest card)
         {
             card.ValidateCardExpiration();
 
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
 
-            var cardEntity = await _cardRepository.CreateCard(userId, _mapper.Map<CardRequest, CardEntity>(card));
+            var cardEntity = await _cardRepository.CreateCard(userId, _mapper.Map<CardEntity>(card));
 
-            return Ok(_mapper.Map<CardEntity, CardResponse>(cardEntity));
+            return Ok(_mapper.Map<CardResponse>(cardEntity));
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(CardResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateCard(UpdateCardRequest card)
+        {
+            card.ValidateCardExpiration();
+
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+
+            var cardEntity = await _cardRepository.UpdateCard(userId, _mapper.Map<CardEntity>(card));
+
+            return Ok(_mapper.Map<CardResponse>(cardEntity));
         }
 
         [HttpDelete]
-        [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> DeleteCard(int cardId)
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");

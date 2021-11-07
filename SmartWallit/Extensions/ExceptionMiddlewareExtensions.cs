@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using SmartWallit.Core.MIddleware;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SmartWallit.MIddleware;
 
 namespace SmartWallit.Extensions
 {

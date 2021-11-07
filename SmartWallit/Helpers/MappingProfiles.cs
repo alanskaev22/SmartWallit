@@ -25,7 +25,9 @@ namespace SmartWallit.Helpers
             CreateMap<CardEntity, CardResponse>();
 
             CreateMap<CardRequest, CardEntity>();
-            
+
+            CreateMap<UpdateCardRequest, CardEntity>();
+
             CreateMap<WalletEntity, Wallet>()
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(d => d.Balance, o => o.MapFrom(s => s.Balance))

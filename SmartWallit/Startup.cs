@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
 using SmartWallit.Extensions;
@@ -15,10 +13,6 @@ using SmartWallit.Infrastructure.Data;
 using SmartWallit.Infrastructure.Data.Repositories;
 using SmartWallit.Infrastructure.Identity;
 using SmartWallit.Infrastructure.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartWallit
 {
@@ -43,6 +37,7 @@ namespace SmartWallit
 
             services.AddTransient<IWalletRepository, WalletRepository>();
             services.AddTransient<ICardRepository, CardRepository>();
+            services.AddTransient<ILogRepository, LogRepository>();
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IEncryptionService, EncryptionService>();
@@ -73,14 +68,14 @@ namespace SmartWallit
                     .AllowAnyMethod()
                     .AllowAnyHeader());
 
-            app.UseSwaggerDocumentation();
+                app.UseSwaggerDocumentation();
             }
-
-            app.ConfigureExceptionMiddleware();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.ConfigureExceptionMiddleware();
 
             app.UseAuthentication(); // Must come before Authorization
 

@@ -7,14 +7,12 @@ using System.Text;
 
 namespace SmartWallit.Infrastructure.Data.Config
 {
-    public class CardConfiguration : IEntityTypeConfiguration<CardEntity>
+    public class LogConfiguration : IEntityTypeConfiguration<LogEntity>
     {
-        public void Configure(EntityTypeBuilder<CardEntity> builder)
+        public void Configure(EntityTypeBuilder<LogEntity> builder)
         {
             builder.Property(c => c.DateCreated).HasDefaultValueSql("getdate()");
-            builder.Property(c => c.CardNickname).HasMaxLength(25).IsRequired(false);
 
         }
     }
-
 }

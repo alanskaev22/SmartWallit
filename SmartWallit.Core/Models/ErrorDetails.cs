@@ -12,7 +12,8 @@ namespace SmartWallit.Core.Models
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Field { get; set; }
-        internal string StackTrace { get; set; }
+        [JsonIgnore]
+        public string StackTrace { get; set; }
 
         public override string ToString()
         {

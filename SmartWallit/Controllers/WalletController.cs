@@ -29,7 +29,6 @@ namespace SmartWallit.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(ErrorDetails))]
         public async Task<IActionResult> GetWallet()
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
@@ -37,8 +36,8 @@ namespace SmartWallit.Controllers
             var walletEntity = await _walletRepository.GetWallet(userId);
             var cardsEntity = await _cardRepository.GetCards(userId);
 
-            var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
+            var wallet = _mapper.Map<Wallet>(walletEntity);
+            var cards = _mapper.Map<List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 
@@ -46,6 +45,7 @@ namespace SmartWallit.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateWallet()
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
@@ -53,8 +53,8 @@ namespace SmartWallit.Controllers
             var walletEntity = await _walletRepository.CreateWallet(userId);
             var cardsEntity = await _cardRepository.GetCards(userId);
 
-            var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
+            var wallet = _mapper.Map<Wallet>(walletEntity);
+            var cards = _mapper.Map<List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 
@@ -62,6 +62,7 @@ namespace SmartWallit.Controllers
         }
 
         [HttpPost("balance/add")]
+        [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
         public async Task<IActionResult> AddFunds(FundsTransfer request)
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
@@ -70,8 +71,8 @@ namespace SmartWallit.Controllers
             var walletEntity = await _walletRepository.AddFunds(userId, request.CardId, request.Amount, email);
             var cardsEntity = await _cardRepository.GetCards(userId);
 
-            var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
+            var wallet = _mapper.Map<Wallet>(walletEntity);
+            var cards = _mapper.Map<List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 
@@ -79,6 +80,7 @@ namespace SmartWallit.Controllers
         }
 
         [HttpPost("balance/withdraw")]
+        [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
         public async Task<IActionResult> WithdrawFunds(FundsTransfer request)
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
@@ -87,8 +89,8 @@ namespace SmartWallit.Controllers
             var walletEntity = await _walletRepository.WithdrawFunds(userId, request.CardId, request.Amount, email);
             var cardsEntity = await _cardRepository.GetCards(userId);
 
-            var wallet = _mapper.Map<WalletEntity, Wallet>(walletEntity);
-            var cards = _mapper.Map<List<CardEntity>, List<CardResponse>>(cardsEntity);
+            var wallet = _mapper.Map<Wallet>(walletEntity);
+            var cards = _mapper.Map<List<CardResponse>>(cardsEntity);
 
             wallet.Cards = cards;
 

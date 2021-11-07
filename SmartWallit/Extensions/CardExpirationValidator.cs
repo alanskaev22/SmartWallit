@@ -6,7 +6,7 @@ namespace SmartWallit.Extensions
 {
     public static class CardExpirationValidator
     {
-        public static void ValidateCardExpiration(this CardRequest cardRequest)
+        public static void ValidateCardExpiration<T>(this T cardRequest) where T : BaseCard
         {
             var currentYear = DateTime.Now.Year;
             var currentMonth = DateTime.Now.Month;

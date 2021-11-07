@@ -1,26 +1,29 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using SmartWallit.Core.Entities;
 using SmartWallit.Core.Exceptions;
+using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartWallit.Core.MIddleware
+namespace SmartWallit.MIddleware
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate next;
+        private ILogRepository _logRepository;
 
         public ExceptionMiddleware(RequestDelegate next)
         {
             this.next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, ILogRepository logRepository)
         {
+            _logRepository = logRepository;
+
             context.Response.ContentType = "application/json";
 
             try
@@ -37,7 +40,7 @@ namespace SmartWallit.Core.MIddleware
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, CustomException exception)
+        private async Task HandleExceptionAsync(HttpContext context, CustomException exception)
         {
             var errorResponse = new ErrorDetails()
             {
@@ -47,16 +50,15 @@ namespace SmartWallit.Core.MIddleware
                 Field = exception.Field
             };
 
-            // Log errorResponse somewhere
-            Console.WriteLine(errorResponse.StackTrace);
+            await LogException(context, errorResponse);
 
             context.Response.StatusCode = (int)exception.StatusCode;
 
+            await context.Response.WriteAsync(errorResponse.ToString());
 
-            return context.Response.WriteAsync(errorResponse.ToString());
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception ex)
+        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             var errorResponse = new ErrorDetails()
             {
@@ -65,11 +67,27 @@ namespace SmartWallit.Core.MIddleware
                 StackTrace = ex.StackTrace
             };
 
-            // Log errorResponse somewhere
+            await LogException(context, errorResponse);
 
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            return context.Response.WriteAsync(errorResponse.ToString());
+            await context.Response.WriteAsync(errorResponse.ToString());
         }
+
+        private async Task LogException(HttpContext context, ErrorDetails errorResponse)
+        {
+            var logEntity = new LogEntity
+            {
+                ServerName = Environment.MachineName,
+                ApiMethodName = context.GetRouteValue("action").ToString(),
+                ExceptionMessage = errorResponse.Message,
+                StackTrace = errorResponse.StackTrace,
+                HttpMethod = context.Request.Method,
+                HttpStatusCode = errorResponse.StatusCode.ToString()
+            };
+
+            await _logRepository.Log(logEntity);
+        }
+
     }
 }

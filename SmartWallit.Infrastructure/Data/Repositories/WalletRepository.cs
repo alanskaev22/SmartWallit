@@ -5,9 +5,7 @@ using SmartWallit.Core.Entities.Identity;
 using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Infrastructure.Data.Repositories

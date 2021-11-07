@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SmartWallit.Models
 {
-    public class CardRequest : CardResponse
+    public class CardRequest : UpdateCardRequest
     {
-        [Required, RegularExpression(@"^[0-9]{3,4}$", ErrorMessage = "Cvv must be 3 or 4 characters")]
-        public int Cvv { get; set; }
+        [Required, StringLength(19, MinimumLength = 8)]
+        public string CardNumber { get; set; }
     }
 }
