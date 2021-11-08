@@ -14,5 +14,6 @@ namespace SmartWallit.Core.Interfaces
         Task<WalletEntity> AddFunds(string userId, int cardId, decimal amount, string email, CancellationToken cancellationToken);
         Task<WalletEntity> WithdrawFunds(string userId, int cardId, decimal amount, string email, CancellationToken cancellationToken);
         Task<bool> DeleteWallet(string userId, CancellationToken cancellationToken);
+        Task<List<TransactionEntity>> GetTransactions(string userId);
     }
 }

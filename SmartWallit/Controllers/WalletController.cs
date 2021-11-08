@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartWallit.Core.Entities;
 using SmartWallit.Core.Interfaces;
-using SmartWallit.Core.Models;
 using SmartWallit.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -98,5 +98,12 @@ namespace SmartWallit.Controllers
             return Ok(wallet);
         }
 
+        [HttpGet("transactions")]
+        [ProducesResponseType(typeof(List<TransactionEntity>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTransactionHistory()
+        {
+            var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
+            return Ok(await _walletRepository.GetTransactions(userId));
+        }
     }
 }

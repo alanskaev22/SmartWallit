@@ -5,6 +5,7 @@ using SmartWallit.Core.Entities.Identity;
 using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -194,6 +195,16 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             }
 
             return wallet;
+        }
+
+        public async Task<List<TransactionEntity>> GetTransactions(string userId)
+        {
+            var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
+            if (wallet == null) throw new CustomException(System.Net.HttpStatusCode.NotFound, "No transactions found.");
+
+            var transactions = await _walletContext.Transactions.Where(t => t.WalletId == wallet.Id).ToListAsync();
+
+            return transactions;
         }
     }
 }
