@@ -12,5 +12,6 @@ namespace SmartWallit.Core.Entities
          public string ApiMethodName { get; set; }
          public string ExceptionMessage { get; set; }
          public string StackTrace {  get; set; }
+         public string UserId { get; set; }
     }
 }

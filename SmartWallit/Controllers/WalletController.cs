@@ -7,6 +7,7 @@ using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
 using SmartWallit.Models;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Controllers
@@ -63,12 +64,12 @@ namespace SmartWallit.Controllers
 
         [HttpPost("balance/add")]
         [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddFunds(FundsTransfer request)
+        public async Task<IActionResult> AddFunds(FundsTransfer request, CancellationToken cancellationToken)
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
             var email = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userEmail");
 
-            var walletEntity = await _walletRepository.AddFunds(userId, request.CardId, request.Amount, email);
+            var walletEntity = await _walletRepository.AddFunds(userId, request.CardId, request.Amount, email, cancellationToken);
             var cardsEntity = await _cardRepository.GetCards(userId);
 
             var wallet = _mapper.Map<Wallet>(walletEntity);
@@ -81,12 +82,12 @@ namespace SmartWallit.Controllers
 
         [HttpPost("balance/withdraw")]
         [ProducesResponseType(typeof(Wallet), StatusCodes.Status200OK)]
-        public async Task<IActionResult> WithdrawFunds(FundsTransfer request)
+        public async Task<IActionResult> WithdrawFunds(FundsTransfer request, CancellationToken cancellationToken)
         {
             var userId = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userId");
             var email = _tokenService.GetClaimValueFromClaimsPrincipal(HttpContext.User, "userEmail");
 
-            var walletEntity = await _walletRepository.WithdrawFunds(userId, request.CardId, request.Amount, email);
+            var walletEntity = await _walletRepository.WithdrawFunds(userId, request.CardId, request.Amount, email, cancellationToken);
             var cardsEntity = await _cardRepository.GetCards(userId);
 
             var wallet = _mapper.Map<Wallet>(walletEntity);

@@ -5,6 +5,7 @@ using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
 using SmartWallit.Core.Models;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -62,12 +63,15 @@ namespace SmartWallit.MIddleware
         {
             var errorResponse = new ErrorDetails()
             {
-                Message = $"Error occured while processing this request. Please try again.",
+                Message = ex.Message,
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 StackTrace = ex.StackTrace
             };
 
             await LogException(context, errorResponse);
+
+            // We want to log exception message but not return in api
+            errorResponse.Message = "Error occured while processing this request. Please try again.";
 
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
@@ -83,7 +87,8 @@ namespace SmartWallit.MIddleware
                 ExceptionMessage = errorResponse.Message,
                 StackTrace = errorResponse.StackTrace,
                 HttpMethod = context.Request.Method,
-                HttpStatusCode = errorResponse.StatusCode.ToString()
+                HttpStatusCode = errorResponse.StatusCode.ToString(),
+                UserId = context.User?.Claims.FirstOrDefault(c => c.Type == "userId").Value,
             };
 
             await _logRepository.Log(logEntity);

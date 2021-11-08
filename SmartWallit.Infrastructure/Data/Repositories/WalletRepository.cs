@@ -6,6 +6,7 @@ using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Infrastructure.Data.Repositories
@@ -52,34 +53,44 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             return wallet ?? throw new CustomException(System.Net.HttpStatusCode.NotFound, "No wallet was found for this user.");
         }
 
-        public async Task<bool> DeleteWallet(string userId)
+        public async Task<bool> DeleteWallet(string userId, CancellationToken cancellationToken)
         {
             var success = false;
 
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
             var cards = await _walletContext.Cards.Where(c => c.WalletId == wallet.Id).ToListAsync();
 
-            using var transaction = _walletContext.Database.BeginTransaction();
-            try
+            using (var transaction = await _walletContext.Database.BeginTransactionAsync(cancellationToken))
             {
-                _walletContext.Cards.RemoveRange(cards);
+                try
+                {
+                    _walletContext.Cards.RemoveRange(cards);
 
-                _walletContext.Wallets.Remove(wallet);
+                    _walletContext.Wallets.Remove(wallet);
 
-                await _walletContext.SaveChangesAsync();
+                    await _walletContext.SaveChangesAsync();
 
-                await transaction.CommitAsync();
+                    // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
+                    await Task.Delay(3000);
 
-                success = true;
-            }
-            catch
-            {
+                    await transaction.CommitAsync(cancellationToken);
+
+                    success = true;
+                }
+                catch(TaskCanceledException ex)
+                {
+                    throw new Exception("Operation was cancelled by user.", ex);
+                }
+                catch
+                {
+                    throw;
+                }
             }
 
             return success;
         }
 
-        public async Task<WalletEntity> AddFunds(string userId, int cardId, decimal amount, string email)
+        public async Task<WalletEntity> AddFunds(string userId, int cardId, decimal amount, string email, CancellationToken cancellationToken)
         {
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
 
@@ -111,7 +122,16 @@ namespace SmartWallit.Infrastructure.Data.Repositories
 
                     _walletContext.SaveChanges();
 
+                    // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
+                    Thread.Sleep(3000);
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     dbTrans.Commit();
+                }
+                catch (OperationCanceledException ex)
+                {
+                    throw new Exception("Operation was cancelled by user.", ex);
                 }
                 catch
                 {
@@ -122,7 +142,7 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             return wallet;
         }
 
-        public async Task<WalletEntity> WithdrawFunds(string userId, int cardId, decimal amount, string email)
+        public async Task<WalletEntity> WithdrawFunds(string userId, int cardId, decimal amount, string email, CancellationToken cancellationToken)
         {
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
 
@@ -156,7 +176,16 @@ namespace SmartWallit.Infrastructure.Data.Repositories
 
                     _walletContext.SaveChanges();
 
+                    // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
+                    Thread.Sleep(3000);
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     dbTrans.Commit();
+                }
+                catch (OperationCanceledException ex)
+                {
+                    throw new Exception("Operation was cancelled by user.", ex);
                 }
                 catch
                 {

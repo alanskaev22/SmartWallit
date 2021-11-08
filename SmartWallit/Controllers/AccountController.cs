@@ -8,6 +8,7 @@ using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
 using SmartWallit.Extensions;
 using SmartWallit.Models;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Controllers
@@ -71,20 +72,28 @@ namespace SmartWallit.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> DeleteAccount()
+        public async Task<IActionResult> DeleteAccount(CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailFromClaims(HttpContext.User);
 
             if (user == null) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Bad Request");
 
+            try
+            {
+
             var wallet = await _walletRepository.GetWallet(user.Id);
 
             if (wallet.Balance > 0) throw new CustomException(System.Net.HttpStatusCode.BadRequest, $"Wallet has a balance of {wallet.Balance}. Transfer remaining balance before deleting account.");
 
-            var result = await _walletRepository.DeleteWallet(user.Id);
+            var result = await _walletRepository.DeleteWallet(user.Id, cancellationToken);
 
             if (!result) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Bad Request");
-
+            }
+            catch (CustomException)
+            {
+                // Do nothing, wallet does not exist
+            }
+            
             var userResult = await _userManager.DeleteAsync(user);
 
             if (!userResult.Succeeded) throw new CustomException(System.Net.HttpStatusCode.BadRequest, "Bad Request");
