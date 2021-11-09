@@ -69,8 +69,8 @@ namespace SmartWallit
                     .AllowAnyMethod()
                     .AllowAnyHeader());
 
-                app.UseSwaggerDocumentation();
             }
+            app.UseSwaggerDocumentation();
 
             app.UseHttpsRedirection();
 
