@@ -13,6 +13,7 @@ using SmartWallit.Infrastructure.Data;
 using SmartWallit.Infrastructure.Data.Repositories;
 using SmartWallit.Infrastructure.Identity;
 using SmartWallit.Infrastructure.Services;
+using System;
 
 namespace SmartWallit
 {
@@ -28,11 +29,11 @@ namespace SmartWallit
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WalletContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("SmartWallit"))
+                options.UseSqlServer(Configuration.GetConnectionString("SmartWallit"), op => op.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null))
             );
 
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Identity"))
+                options.UseSqlServer(Configuration.GetConnectionString("Identity"), op => op.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null))
             );
 
             services.AddTransient<IWalletRepository, WalletRepository>();

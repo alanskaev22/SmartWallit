@@ -61,32 +61,39 @@ namespace SmartWallit.Infrastructure.Data.Repositories
             var wallet = await _walletContext.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);
             var cards = await _walletContext.Cards.Where(c => c.WalletId == wallet.Id).ToListAsync();
 
-            using (var transaction = await _walletContext.Database.BeginTransactionAsync(cancellationToken))
-            {
-                try
-                {
-                    _walletContext.Cards.RemoveRange(cards);
+            var executionStrategy = _walletContext.Database.CreateExecutionStrategy();
 
-                    _walletContext.Wallets.Remove(wallet);
+            await executionStrategy.ExecuteAsync(
+                    async () =>
+                    {
 
-                    await _walletContext.SaveChangesAsync();
+                        using (var transaction = await _walletContext.Database.BeginTransactionAsync(cancellationToken))
+                        {
+                            try
+                            {
+                                _walletContext.Cards.RemoveRange(cards);
 
-                    // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
-                    await Task.Delay(3000);
+                                _walletContext.Wallets.Remove(wallet);
 
-                    await transaction.CommitAsync(cancellationToken);
+                                await _walletContext.SaveChangesAsync();
 
-                    success = true;
-                }
-                catch(TaskCanceledException ex)
-                {
-                    throw new Exception("Operation was cancelled by user.", ex);
-                }
-                catch
-                {
-                    throw;
-                }
-            }
+                                // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
+                                await Task.Delay(3000);
+
+                                await transaction.CommitAsync(cancellationToken);
+
+                                success = true;
+                            }
+                            catch (TaskCanceledException ex)
+                            {
+                                throw new Exception("Operation was cancelled by user.", ex);
+                            }
+                            catch
+                            {
+                                throw;
+                            }
+                        }
+                    });
 
             return success;
         }
@@ -113,31 +120,38 @@ namespace SmartWallit.Infrastructure.Data.Repositories
                     Email = email,
                     CardNumber = card.CardNumber
                 };
+                var executionStrategy = _walletContext.Database.CreateExecutionStrategy();
 
-                using var dbTrans = _walletContext.Database.BeginTransaction();
-                try
-                {
-                    _walletContext.Wallets.Update(wallet);
+                executionStrategy.Execute(
+                    () =>
+                    {
+                        using var dbTrans = _walletContext.Database.BeginTransaction();
+                        try
+                        {
+                            _walletContext.Wallets.Update(wallet);
 
-                    _walletContext.Transactions.Add(transaction);
+                            _walletContext.Transactions.Add(transaction);
 
-                    _walletContext.SaveChanges();
+                            _walletContext.SaveChanges();
 
-                    // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
-                    Thread.Sleep(3000);
+                        // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
+                        Thread.Sleep(3000);
 
-                    cancellationToken.ThrowIfCancellationRequested();
+                            cancellationToken.ThrowIfCancellationRequested();
 
-                    dbTrans.Commit();
-                }
-                catch (OperationCanceledException ex)
-                {
-                    throw new Exception("Operation was cancelled by user.", ex);
-                }
-                catch
-                {
-                    throw new CustomException(System.Net.HttpStatusCode.InternalServerError, "Unable to add funds. No funds have been transferred from the card.");
-                }
+                            dbTrans.Commit();
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            throw new Exception("Operation was cancelled by user.", ex);
+                        }
+                        catch
+                        {
+                            throw new CustomException(System.Net.HttpStatusCode.InternalServerError, "Unable to add funds. No funds have been transferred from the card.");
+                        }
+
+                    }
+                    );
             }
 
             return wallet;
@@ -167,31 +181,36 @@ namespace SmartWallit.Infrastructure.Data.Repositories
                     Email = email,
                     CardNumber = card.CardNumber
                 };
+                var executionStrategy = _walletContext.Database.CreateExecutionStrategy();
 
-                using var dbTrans = _walletContext.Database.BeginTransaction();
-                try
-                {
-                    _walletContext.Wallets.Update(wallet);
+                executionStrategy.Execute(
+                    () =>
+                    {
+                        using var dbTrans = _walletContext.Database.BeginTransaction();
+                        try
+                        {
+                            _walletContext.Wallets.Update(wallet);
 
-                    _walletContext.Transactions.Add(transaction);
+                            _walletContext.Transactions.Add(transaction);
 
-                    _walletContext.SaveChanges();
+                            _walletContext.SaveChanges();
 
-                    // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
-                    Thread.Sleep(3000);
+                        // Wait on purpose to demonstrate cancellation works and allow user to change their mind;
+                        Thread.Sleep(3000);
 
-                    cancellationToken.ThrowIfCancellationRequested();
+                            cancellationToken.ThrowIfCancellationRequested();
 
-                    dbTrans.Commit();
-                }
-                catch (OperationCanceledException ex)
-                {
-                    throw new Exception("Operation was cancelled by user.", ex);
-                }
-                catch
-                {
-                    throw new CustomException(System.Net.HttpStatusCode.InternalServerError, "Unable to withdraw funds. No funds have been transferred from the wallet.");
-                }
+                            dbTrans.Commit();
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            throw new Exception("Operation was cancelled by user.", ex);
+                        }
+                        catch
+                        {
+                            throw new CustomException(System.Net.HttpStatusCode.InternalServerError, "Unable to withdraw funds. No funds have been transferred from the wallet.");
+                        }
+                    });
             }
 
             return wallet;
