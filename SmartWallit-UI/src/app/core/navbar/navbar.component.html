@@ -1,0 +1,28 @@
+<mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+    <mat-toolbar-row>
+        <div fxFlex>
+            <a class="brand" [routerLink]="['/']">
+                <span>S</span>
+                <span>M</span>
+                <span>A</span>
+                <span>R</span>
+                <span>T</span>
+                <span></span>
+                <span>W</span>
+                <span>A</span>
+                <span>L</span>
+                <span>L</span>
+                <span>I</span>
+                <span>T</span>
+            </a>
+        </div>
+
+        <a mat-flat-button disableRipple [routerLink]="['account/register']" routerLinkActive="active">
+            Sign Up
+        </a>
+        <a mat-flat-button disableRipple [routerLink]="['account/login']" routerLinkActive="active">
+            Log in
+        </a>
+
+    </mat-toolbar-row>
+</mat-toolbar>
