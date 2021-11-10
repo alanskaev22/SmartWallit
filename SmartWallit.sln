@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartWallit.Infrastructure"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1EAD8C3A-B4AB-4059-A435-CDCA6A1CCE5D}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "SmartWallit-UI", "SmartWallit-UI\SmartWallit-UI.esproj", "{DA8827C3-7507-417D-87E4-C82DC29FFC4D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,12 +29,6 @@ Global
 		{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B8CC05E-8565-4B52-95AC-0DF23E5716F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA8827C3-7507-417D-87E4-C82DC29FFC4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA8827C3-7507-417D-87E4-C82DC29FFC4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA8827C3-7507-417D-87E4-C82DC29FFC4D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{DA8827C3-7507-417D-87E4-C82DC29FFC4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA8827C3-7507-417D-87E4-C82DC29FFC4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA8827C3-7507-417D-87E4-C82DC29FFC4D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
