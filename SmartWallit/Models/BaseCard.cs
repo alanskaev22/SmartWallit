@@ -11,5 +11,6 @@ namespace SmartWallit.Models
         public int ExpirationMonth { get; set; }
         [StringLength(50)]
         public string CardNickname { get; set; }
+        public string CardBrand { get; private set; }
     }
 }

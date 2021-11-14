@@ -13,6 +13,7 @@ namespace SmartWallit.Core.Entities
         public int WalletId { get; set; }
         public string CardHash { get; set; }
         public byte[] CardSalt { get; set; }
+        public string CardBrand { get; set; }
 
     }
 }

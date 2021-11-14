@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartWallit.Core.Entities;
+using SmartWallit.Core.Enums;
 using SmartWallit.Core.Exceptions;
 using SmartWallit.Core.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SmartWallit.Infrastructure.Data.Repositories
@@ -37,6 +39,8 @@ namespace SmartWallit.Infrastructure.Data.Repositories
 
             card.CardHash = encryptedCardNumber.Hash;
             card.CardSalt = encryptedCardNumber.Salt;
+
+            card.CardBrand = GetCardBrand(card.CardNumber).ToString();
 
             // Leave only first and last 4 characters of a CardNumber;
             card.CardNumber = card.CardNumber.Replace(card.CardNumber[4..^4], ".");
@@ -109,5 +113,26 @@ namespace SmartWallit.Infrastructure.Data.Repositories
 
             return cardInDb;
         }
+
+        private CardBrand GetCardBrand(string cardNumber)
+        {
+            if (Regex.IsMatch(cardNumber, VisaRegex)) return CardBrand.Visa;
+            if (Regex.IsMatch(cardNumber, MasterCardRegex)) return CardBrand.MasterCard;
+            if (Regex.IsMatch(cardNumber, AmexRegex)) return CardBrand.Amex;
+            if (Regex.IsMatch(cardNumber, DinersClubRegex)) return CardBrand.DinersClub;
+            if (Regex.IsMatch(cardNumber, DiscoverRegex)) return CardBrand.Discover;
+            if (Regex.IsMatch(cardNumber, JCBRegex)) return CardBrand.JCB;
+
+            return CardBrand.Unknown;
+
+        }
+
+        private string VisaRegex = @"^4[0-9]{6,}$";
+        private string MasterCardRegex = @"^5[1-5] [0-9]{5,}| 222[1 - 9][0 - 9]{ 3,}| 22[3 - 9][0 - 9]{ 4,}| 2[3 - 6][0 - 9]{ 5,}| 27[01][0 - 9]{ 4,}| 2720[0 - 9]{ 3,}$";
+        private string AmexRegex = @"^3[47][0 - 9]{ 5,}$";
+        private string DinersClubRegex = @"^3(?:0[0 - 5] |[68][0 - 9])[0 - 9]{ 4,}$";
+        private string DiscoverRegex = @"^6(?:011 | 5[0 - 9]{ 2})[0-9]{ 3,}$";
+        private string JCBRegex = @"^(?: 2131 | 1800 | 35[0 - 9]{ 3})[0-9]{ 3,}$";
     }
+
 }
